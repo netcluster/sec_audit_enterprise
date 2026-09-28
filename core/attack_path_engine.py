@@ -1,6 +1,6 @@
 """
 SEC-AUDIT SERMIG - Motor de Grafo de Rutas de Ataque (Attack Path Engine)
-Tipografía nítida y legible con etiquetas claras de alto contraste.
+Definición de colores oscuros estables en hover y highlight para evitar destellos blancos.
 """
 
 from typing import List, Dict, Any
@@ -13,8 +13,8 @@ class AttackPathEngine:
 
     def get_attack_graph_data(self) -> Dict[str, Any]:
         """
-        Retorna la topología organizada en niveles con etiquetas tipográficas
-        claras, sin negritas empastadas y con máxima legibilidad.
+        Retorna la topología con colores de fondo oscuros fijos y brillo suave
+        en el borde para hover, garantizando legibilidad total del texto en todo momento.
         """
         nodes = [
             # NIVEL 1: ADVERSARIO / AMENAZA EXTERNA
@@ -25,13 +25,14 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#1f1728",
+                    "background": "#1e132b",
                     "border": "#f43f5e",
-                    "highlight": {"background": "#371b3e", "border": "#fb7185"}
+                    "hover": {"background": "#291a3a", "border": "#fb7185"},
+                    "highlight": {"background": "#291a3a", "border": "#fb7185"}
                 },
                 "font": {"color": "#ffffff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(244, 63, 94, 0.35)", "size": 10},
+                "shadow": {"enabled": True, "color": "rgba(244, 63, 94, 0.35)", "size": 8},
                 "tier": "entry"
             },
 
@@ -43,11 +44,12 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#0f172a",
+                    "background": "#0b1528",
                     "border": "#38bdf8",
-                    "highlight": {"background": "#1e293b", "border": "#7dd3fc"}
+                    "hover": {"background": "#13233f", "border": "#7dd3fc"},
+                    "highlight": {"background": "#13233f", "border": "#7dd3fc"}
                 },
-                "font": {"color": "#e2e8f0", "size": 11, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
                 "shadow": {"enabled": True, "color": "rgba(56, 189, 248, 0.25)", "size": 8},
                 "tier": "perimeter"
@@ -59,11 +61,12 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#2a0808",
+                    "background": "#280a0a",
                     "border": "#ef4444",
-                    "highlight": {"background": "#450a0a", "border": "#f87171"}
+                    "hover": {"background": "#3d1010", "border": "#f87171"},
+                    "highlight": {"background": "#3d1010", "border": "#f87171"}
                 },
-                "font": {"color": "#fecaca", "size": 11, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
                 "shadow": {"enabled": True, "color": "rgba(239, 68, 68, 0.3)", "size": 8},
                 "tier": "cloud"
@@ -75,11 +78,12 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#2c1106",
+                    "background": "#2b1207",
                     "border": "#f97316",
-                    "highlight": {"background": "#431407", "border": "#fb923c"}
+                    "hover": {"background": "#3f1c0d", "border": "#fb923c"},
+                    "highlight": {"background": "#3f1c0d", "border": "#fb923c"}
                 },
-                "font": {"color": "#fed7aa", "size": 11, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
                 "shadow": {"enabled": True, "color": "rgba(249, 115, 22, 0.3)", "size": 8},
                 "tier": "cloud"
@@ -95,9 +99,10 @@ class AttackPathEngine:
                 "color": {
                     "background": "#1e293b",
                     "border": "#fbbf24",
-                    "highlight": {"background": "#334155", "border": "#fde047"}
+                    "hover": {"background": "#2b394f", "border": "#fde047"},
+                    "highlight": {"background": "#2b394f", "border": "#fde047"}
                 },
-                "font": {"color": "#fef08a", "size": 11, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
                 "shadow": {"enabled": True, "color": "rgba(251, 191, 36, 0.25)", "size": 8},
                 "tier": "lateral"
@@ -111,9 +116,10 @@ class AttackPathEngine:
                 "color": {
                     "background": "#042f2e",
                     "border": "#2dd4bf",
-                    "highlight": {"background": "#115e59", "border": "#5eead4"}
+                    "hover": {"background": "#094443", "border": "#5eead4"},
+                    "highlight": {"background": "#094443", "border": "#5eead4"}
                 },
-                "font": {"color": "#ccfbf1", "size": 11, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
                 "shadow": {"enabled": True, "color": "rgba(45, 212, 191, 0.25)", "size": 8},
                 "tier": "defended"
@@ -127,13 +133,14 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#250e4a",
+                    "background": "#240e47",
                     "border": "#c084fc",
-                    "highlight": {"background": "#3b0764", "border": "#d8b4fe"}
+                    "hover": {"background": "#351566", "border": "#d8b4fe"},
+                    "highlight": {"background": "#351566", "border": "#d8b4fe"}
                 },
-                "font": {"color": "#f3e8ff", "size": 12, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 12},
+                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 10},
                 "tier": "crown_jewel"
             },
             {
@@ -143,13 +150,14 @@ class AttackPathEngine:
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#250e4a",
+                    "background": "#240e47",
                     "border": "#c084fc",
-                    "highlight": {"background": "#3b0764", "border": "#d8b4fe"}
+                    "hover": {"background": "#351566", "border": "#d8b4fe"},
+                    "highlight": {"background": "#351566", "border": "#d8b4fe"}
                 },
-                "font": {"color": "#f3e8ff", "size": 12, "face": "Segoe UI"},
+                "font": {"color": "#ffffff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 12},
+                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 10},
                 "tier": "crown_jewel"
             }
         ]
@@ -161,7 +169,7 @@ class AttackPathEngine:
                 "from": "node-attacker",
                 "to": "node-dmz-web",
                 "label": "Paso 1: Robo de Sesion Web (CVSS 5.4)",
-                "color": {"color": "#38bdf8", "highlight": "#7dd3fc"},
+                "color": {"color": "#38bdf8", "highlight": "#7dd3fc", "hover": "#7dd3fc"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
@@ -171,7 +179,7 @@ class AttackPathEngine:
                 "from": "node-dmz-web",
                 "to": "node-lan-endpoint",
                 "label": "Paso 2: Movimiento Lateral SMB 445",
-                "color": {"color": "#fbbf24", "highlight": "#fde047"},
+                "color": {"color": "#fbbf24", "highlight": "#fde047", "hover": "#fde047"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
@@ -181,7 +189,7 @@ class AttackPathEngine:
                 "from": "node-lan-endpoint",
                 "to": "node-ad-dc",
                 "label": "Paso 3: Escalacion AD (Kerberoasting)",
-                "color": {"color": "#c084fc", "highlight": "#d8b4fe"},
+                "color": {"color": "#c084fc", "highlight": "#d8b4fe", "hover": "#d8b4fe"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
@@ -193,7 +201,7 @@ class AttackPathEngine:
                 "from": "node-attacker",
                 "to": "node-azure-nsg",
                 "label": "Paso 1: Fuerza Bruta RDP 3389 (CVSS 9.8)",
-                "color": {"color": "#f87171", "highlight": "#fca5a5"},
+                "color": {"color": "#f87171", "highlight": "#fca5a5", "hover": "#fca5a5"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
@@ -203,7 +211,7 @@ class AttackPathEngine:
                 "from": "node-azure-nsg",
                 "to": "node-core-db",
                 "label": "Paso 2: Conexion a Subred BD (Oracle 1521)",
-                "color": {"color": "#c084fc", "highlight": "#d8b4fe"},
+                "color": {"color": "#c084fc", "highlight": "#d8b4fe", "hover": "#d8b4fe"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
@@ -215,7 +223,7 @@ class AttackPathEngine:
                 "from": "node-attacker",
                 "to": "node-oci-bucket",
                 "label": "Paso 1: Descarga Anonima Bucket (CVSS 9.1)",
-                "color": {"color": "#fb923c", "highlight": "#fdba74"},
+                "color": {"color": "#fb923c", "highlight": "#fdba74", "hover": "#fdba74"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
                 "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
