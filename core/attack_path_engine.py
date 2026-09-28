@@ -1,7 +1,6 @@
 """
 SEC-AUDIT SERMIG - Motor de Grafo de Rutas de Ataque (Attack Path Engine)
-Modelo jerárquico por niveles (Tiered Attack Topology) inspirado en Horizon3.ai NodeZero
-con niveles ordenados (Left-to-Right), metadatos de activos y puntos de corte.
+Tipografía nítida y legible con etiquetas claras de alto contraste.
 """
 
 from typing import List, Dict, Any
@@ -14,176 +13,177 @@ class AttackPathEngine:
 
     def get_attack_graph_data(self) -> Dict[str, Any]:
         """
-        Retorna la topología organizada en niveles de profundidad (Levels 1 a 4)
-        para garantizar un diseño limpio, no amontonado y de alta legibilidad.
+        Retorna la topología organizada en niveles con etiquetas tipográficas
+        claras, sin negritas empastadas y con máxima legibilidad.
         """
         nodes = [
-            # NIVEL 1: VECTOR DE ENTRADA / ADVERSARIO
+            # NIVEL 1: ADVERSARIO / AMENAZA EXTERNA
             {
                 "id": "node-attacker",
-                "label": "🔴 ATACANTE EXTERNO\n(Internet / Adversario)\nIP: 198.51.100.23",
+                "label": "🔴 Atacante Externo\n(Internet / Adversario)\nIP: 198.51.100.23",
                 "level": 1,
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#1e1b4b",
-                    "border": "#e11d48",
-                    "highlight": {"background": "#311042", "border": "#f43f5e"}
+                    "background": "#1f1728",
+                    "border": "#f43f5e",
+                    "highlight": {"background": "#371b3e", "border": "#fb7185"}
                 },
-                "font": {"color": "#fda4af", "size": 12, "face": "Segoe UI", "multi": True, "bold": True},
+                "font": {"color": "#ffffff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(225, 29, 72, 0.4)", "size": 12},
+                "shadow": {"enabled": True, "color": "rgba(244, 63, 94, 0.35)", "size": 10},
                 "tier": "entry"
             },
 
-            # NIVEL 2: PERÍMETRO, DMZ & CLOUD INGRESS
+            # NIVEL 2: PERÍMETRO WEB & CLOUD
             {
                 "id": "node-dmz-web",
-                "label": "🌐 PORTAL WEB SERMIG\ntramites.serviciomigraciones.cl\n[Falta CSP / XSS Potencial]",
+                "label": "🌐 Portal Web SERMIG\ntramites.serviciomigraciones.cl\n[Falta CSP / XSS]",
                 "level": 2,
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#172554",
-                    "border": "#3b82f6",
-                    "highlight": {"background": "#1e3a8a", "border": "#60a5fa"}
+                    "background": "#0f172a",
+                    "border": "#38bdf8",
+                    "highlight": {"background": "#1e293b", "border": "#7dd3fc"}
                 },
-                "font": {"color": "#93c5fd", "size": 11, "face": "Segoe UI", "multi": True},
+                "font": {"color": "#e2e8f0", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(59, 130, 246, 0.3)", "size": 8},
+                "shadow": {"enabled": True, "color": "rgba(56, 189, 248, 0.25)", "size": 8},
                 "tier": "perimeter"
             },
             {
                 "id": "node-azure-nsg",
-                "label": "☁️ AZURE NSG INBOUND\nnsg-sermig-core-prod\n[RDP 3389 expuesto a Internet]",
+                "label": "☁️ Azure NSG Inbound\nnsg-sermig-core-prod\n[RDP 3389 expuesto 0.0.0.0/0]",
                 "level": 2,
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#450a0a",
-                    "border": "#dc2626",
-                    "highlight": {"background": "#7f1d1d", "border": "#ef4444"}
+                    "background": "#2a0808",
+                    "border": "#ef4444",
+                    "highlight": {"background": "#450a0a", "border": "#f87171"}
                 },
-                "font": {"color": "#fca5a5", "size": 11, "face": "Segoe UI", "multi": True},
+                "font": {"color": "#fecaca", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(220, 38, 38, 0.35)", "size": 8},
+                "shadow": {"enabled": True, "color": "rgba(239, 68, 68, 0.3)", "size": 8},
                 "tier": "cloud"
             },
             {
                 "id": "node-oci-bucket",
-                "label": "☁️ OCI OBJECT STORAGE\nBucket-Archivos-Temporales\n[Visibilidad Pública Activa]",
+                "label": "☁️ OCI Object Storage\nBucket-Archivos-Temporales\n[Visibilidad Pública Activa]",
                 "level": 2,
                 "shape": "box",
                 "margin": 10,
                 "color": {
-                    "background": "#431407",
-                    "border": "#ea580c",
-                    "highlight": {"background": "#7c2d12", "border": "#fb923c"}
+                    "background": "#2c1106",
+                    "border": "#f97316",
+                    "highlight": {"background": "#431407", "border": "#fb923c"}
                 },
-                "font": {"color": "#fdba74", "size": 11, "face": "Segoe UI", "multi": True},
+                "font": {"color": "#fed7aa", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(234, 88, 12, 0.35)", "size": 8},
+                "shadow": {"enabled": True, "color": "rgba(249, 115, 22, 0.3)", "size": 8},
                 "tier": "cloud"
             },
 
-            # NIVEL 3: PIVOT INTERNO & MOVIMIENTO LATERAL
+            # NIVEL 3: PIVOT INTERNO LAN
             {
                 "id": "node-lan-endpoint",
-                "label": "💻 PUESTO DE TRABAJO LAN\nHost: PC-OPERACIONES (10.123.8.79)\n[SMB 445 Activo / Sin NLA]",
+                "label": "💻 Puesto de Trabajo LAN\nHost: PC-OPERACIONES (10.123.8.79)\n[SMB 445 Activo / Sin NLA]",
                 "level": 3,
                 "shape": "box",
                 "margin": 10,
                 "color": {
                     "background": "#1e293b",
-                    "border": "#f59e0b",
-                    "highlight": {"background": "#334155", "border": "#fbbf24"}
+                    "border": "#fbbf24",
+                    "highlight": {"background": "#334155", "border": "#fde047"}
                 },
-                "font": {"color": "#fde68a", "size": 11, "face": "Segoe UI", "multi": True},
+                "font": {"color": "#fef08a", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(245, 158, 11, 0.3)", "size": 8},
+                "shadow": {"enabled": True, "color": "rgba(251, 191, 36, 0.25)", "size": 8},
                 "tier": "lateral"
             },
             {
                 "id": "node-sgsi-srv",
-                "label": "🛡️ SERVIDOR SGSI-SOC\nsrv-sgsi-soc (10.100.1.34)\n[Nginx / Hardening Activo]",
+                "label": "🛡️ Servidor SGSI-SOC\nsrv-sgsi-soc (10.100.1.34)\n[Nginx / Hardening Activo]",
                 "level": 3,
                 "shape": "box",
                 "margin": 10,
                 "color": {
                     "background": "#042f2e",
-                    "border": "#14b8a6",
-                    "highlight": {"background": "#115e59", "border": "#2dd4bf"}
+                    "border": "#2dd4bf",
+                    "highlight": {"background": "#115e59", "border": "#5eead4"}
                 },
-                "font": {"color": "#99f6e4", "size": 11, "face": "Segoe UI", "multi": True},
+                "font": {"color": "#ccfbf1", "size": 11, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(20, 184, 166, 0.3)", "size": 8},
+                "shadow": {"enabled": True, "color": "rgba(45, 212, 191, 0.25)", "size": 8},
                 "tier": "defended"
             },
 
-            # NIVEL 4: OBJETIVOS DE MÁXIMO IMPACTO (JOYAS DE LA CORONA)
+            # NIVEL 4: JOYAS DE LA CORONA
             {
                 "id": "node-ad-dc",
-                "label": "👑 CONTROLADOR DE DOMINIO\nDC01 (sermig.local)\n[Active Directory / Kerberos]",
+                "label": "👑 Controlador de Dominio\nDC01 (sermig.local)\n[Active Directory / Kerberos]",
                 "level": 4,
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#2e1065",
-                    "border": "#a855f7",
-                    "highlight": {"background": "#3b0764", "border": "#c084fc"}
+                    "background": "#250e4a",
+                    "border": "#c084fc",
+                    "highlight": {"background": "#3b0764", "border": "#d8b4fe"}
                 },
-                "font": {"color": "#e9d5ff", "size": 12, "face": "Segoe UI", "multi": True, "bold": True},
+                "font": {"color": "#f3e8ff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(168, 85, 247, 0.5)", "size": 14},
+                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 12},
                 "tier": "crown_jewel"
             },
             {
                 "id": "node-core-db",
-                "label": "👑 BASE DE DATOS CENTRAL\nsrv-db-oracle (10.100.1.10)\n[Datos Migratorios & Visas]",
+                "label": "👑 Base de Datos Central\nsrv-db-oracle (10.100.1.10)\n[Datos Migratorios & Visas]",
                 "level": 4,
                 "shape": "box",
                 "margin": 12,
                 "color": {
-                    "background": "#2e1065",
-                    "border": "#a855f7",
-                    "highlight": {"background": "#3b0764", "border": "#c084fc"}
+                    "background": "#250e4a",
+                    "border": "#c084fc",
+                    "highlight": {"background": "#3b0764", "border": "#d8b4fe"}
                 },
-                "font": {"color": "#e9d5ff", "size": 12, "face": "Segoe UI", "multi": True, "bold": True},
+                "font": {"color": "#f3e8ff", "size": 12, "face": "Segoe UI"},
                 "borderWidth": 2,
-                "shadow": {"enabled": True, "color": "rgba(168, 85, 247, 0.5)", "size": 14},
+                "shadow": {"enabled": True, "color": "rgba(192, 132, 252, 0.45)", "size": 12},
                 "tier": "crown_jewel"
             }
         ]
 
+        # ETIQUETAS DE ARISTAS: Ligeras, concisas y con fondo contrastado
         edges = [
-            # CADENA 1: WEB DAST -> LATERAL SMB -> DOMAIN CONTROLLER
+            # CADENA 1: WEB -> SMB LAN -> ACTIVE DIRECTORY
             {
                 "from": "node-attacker",
                 "to": "node-dmz-web",
-                "label": "1. Robo de Sesión\n(CVSS 5.4)",
-                "color": {"color": "#3b82f6", "highlight": "#60a5fa"},
+                "label": "Paso 1: Robo de Sesion Web (CVSS 5.4)",
+                "color": {"color": "#38bdf8", "highlight": "#7dd3fc"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#93c5fd", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 2.5
             },
             {
                 "from": "node-dmz-web",
                 "to": "node-lan-endpoint",
-                "label": "2. Movimiento Lateral SMB\n(Puerto 445)",
-                "color": {"color": "#f59e0b", "highlight": "#fbbf24"},
+                "label": "Paso 2: Movimiento Lateral SMB 445",
+                "color": {"color": "#fbbf24", "highlight": "#fde047"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#fde68a", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 2.5
             },
             {
                 "from": "node-lan-endpoint",
                 "to": "node-ad-dc",
-                "label": "3. Escalación de Privilegios\n(Kerberoasting)",
-                "color": {"color": "#a855f7", "highlight": "#c084fc"},
+                "label": "Paso 3: Escalacion AD (Kerberoasting)",
+                "color": {"color": "#c084fc", "highlight": "#d8b4fe"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#e9d5ff", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 3
             },
@@ -192,20 +192,20 @@ class AttackPathEngine:
             {
                 "from": "node-attacker",
                 "to": "node-azure-nsg",
-                "label": "1. Fuerza Bruta RDP\n(Puerto 3389 - CVSS 9.8)",
-                "color": {"color": "#ef4444", "highlight": "#f87171"},
+                "label": "Paso 1: Fuerza Bruta RDP 3389 (CVSS 9.8)",
+                "color": {"color": "#f87171", "highlight": "#fca5a5"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#fca5a5", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 3
             },
             {
                 "from": "node-azure-nsg",
                 "to": "node-core-db",
-                "label": "2. Acceso a Subred BD\n(Oracle 1521)",
-                "color": {"color": "#a855f7", "highlight": "#c084fc"},
+                "label": "Paso 2: Conexion a Subred BD (Oracle 1521)",
+                "color": {"color": "#c084fc", "highlight": "#d8b4fe"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#e9d5ff", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 3
             },
@@ -214,10 +214,10 @@ class AttackPathEngine:
             {
                 "from": "node-attacker",
                 "to": "node-oci-bucket",
-                "label": "Descarga No Autenticada\n(Bucket Público - CVSS 9.1)",
-                "color": {"color": "#f97316", "highlight": "#fb923c"},
+                "label": "Paso 1: Descarga Anonima Bucket (CVSS 9.1)",
+                "color": {"color": "#fb923c", "highlight": "#fdba74"},
                 "arrows": {"to": {"enabled": True, "scaleFactor": 0.8}},
-                "font": {"color": "#fdba74", "size": 10, "align": "middle", "background": "#0f172a"},
+                "font": {"color": "#ffffff", "size": 11, "face": "Segoe UI", "background": "#0f172a", "strokeWidth": 0},
                 "smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.3},
                 "width": 2.5
             }
