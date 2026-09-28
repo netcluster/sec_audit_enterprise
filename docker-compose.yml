@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # Base de Datos PostgreSQL Segura (Sin puertos expuestos al exterior)
+  postgres_sec_audit:
+    image: postgres:16-alpine
+    container_name: sec_audit_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-sec_audit_db}
+      POSTGRES_USER: ${DB_USER:-sec_audit_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-sec_audit_pass_dev}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - sec_audit_internal_net
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-sec_audit_user} -d ${DB_NAME:-sec_audit_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis para cola de escaneos asíncronos
+  redis_sec_audit:
+    image: redis:7-alpine
+    container_name: sec_audit_redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-redis_pass_dev}"]
+    networks:
+      - sec_audit_internal_net
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+
+  # API Backend Core (FastAPI)
+  api_core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sec_audit_api
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - DB_HOST=postgres_sec_audit
+      - DB_USER=${DB_USER:-sec_audit_user}
+      - DB_PASSWORD=${DB_PASSWORD:-sec_audit_pass_dev}
+      - DB_NAME=${DB_NAME:-sec_audit_db}
+      - REDIS_HOST=redis_sec_audit
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis_pass_dev}
+    depends_on:
+      postgres_sec_audit:
+        condition: service_healthy
+      redis_sec_audit:
+        condition: service_started
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - sec_audit_internal_net
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+
+  # Worker Asíncrono de Escaneos y Auditorías
+  worker_scanners:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sec_audit_worker
+    restart: unless-stopped
+    command: ["celery", "-A", "core.celery_app", "worker", "--loglevel=info", "--concurrency=2"]
+    environment:
+      - APP_ENV=production
+      - DB_HOST=postgres_sec_audit
+      - DB_USER=${DB_USER:-sec_audit_user}
+      - DB_PASSWORD=${DB_PASSWORD:-sec_audit_pass_dev}
+      - DB_NAME=${DB_NAME:-sec_audit_db}
+      - REDIS_HOST=redis_sec_audit
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redis_pass_dev}
+    depends_on:
+      postgres_sec_audit:
+        condition: service_healthy
+      redis_sec_audit:
+        condition: service_started
+    networks:
+      - sec_audit_internal_net
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+
+networks:
+  sec_audit_internal_net:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
