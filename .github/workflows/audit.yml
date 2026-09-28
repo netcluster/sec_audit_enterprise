@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar Código
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Configurar Python
-        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.11'
           cache: 'pip'
@@ -31,7 +31,6 @@ jobs:
 
       - name: 1. Verificación de Sintaxis e Integridad
         run: |
-          # Compila todos los archivos .py del proyecto (excluye entornos virtuales y .git)
           find . -name "*.py" \
             -not -path "*/.*" \
             -not -path "*/venv/*" \
@@ -60,7 +59,6 @@ jobs:
       - name: 3. Escaneo de Seguridad con Guías de Solución (Bandit)
         continue-on-error: true
         run: |
-          # Bandit ya está en requirements.txt, pero lo instalamos por seguridad
           pip install bandit
           echo "### 🛡️ Recomendaciones de Seguridad (Bandit)" >> $GITHUB_STEP_SUMMARY
           echo "Mitigación y buenas prácticas para código Python:" >> $GITHUB_STEP_SUMMARY
@@ -71,7 +69,6 @@ jobs:
       - name: 4. Auditoría de Dependencias (Pip-audit)
         continue-on-error: true
         run: |
-          # pip-audit ya está en requirements.txt
           pip install pip-audit
           echo "### 📦 Alertas sobre Dependencias y Vulnerabilidades CVE" >> $GITHUB_STEP_SUMMARY
           if [ -f requirements.txt ]; then
@@ -83,7 +80,6 @@ jobs:
       - name: 5. Análisis de Calidad y Estilo (Ruff)
         continue-on-error: true
         run: |
-          # Ruff ya está en requirements.txt
           pip install ruff
           echo "### 🎨 Sugerencias de Estilo y Sintaxis (Ruff)" >> $GITHUB_STEP_SUMMARY
           echo '```text' >> $GITHUB_STEP_SUMMARY
