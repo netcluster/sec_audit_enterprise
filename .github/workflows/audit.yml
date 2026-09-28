@@ -1,0 +1,91 @@
+name: Auditoría y Seguridad - SEC-AUDIT ENTERPRISE
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  audit-and-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar Código
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configurar Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar Dependencias del Proyecto
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: 1. Verificación de Sintaxis e Integridad
+        run: |
+          # Compila todos los archivos .py del proyecto (excluye entornos virtuales y .git)
+          find . -name "*.py" \
+            -not -path "*/.*" \
+            -not -path "*/venv/*" \
+            -not -path "*/.venv/*" \
+            -not -path "*/__pycache__/*" \
+            -print0 | xargs -0 -r python -m py_compile
+
+      - name: 2. Escaneo de Vulnerabilidades Lógicas (Semgrep)
+        continue-on-error: true
+        run: |
+          pip install semgrep
+          echo "### 🔍 Alertas de Vulnerabilidad Lógica (Semgrep)" >> $GITHUB_STEP_SUMMARY
+          echo "Análisis de patrones de seguridad y OWASP (FastAPI / APIs REST):" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          semgrep scan --config auto \
+            --exclude .git \
+            --exclude venv \
+            --exclude .venv \
+            --exclude __pycache__ \
+            --exclude reports \
+            --exclude output \
+            --exclude scans_output \
+            --text >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: 3. Escaneo de Seguridad con Guías de Solución (Bandit)
+        continue-on-error: true
+        run: |
+          # Bandit ya está en requirements.txt, pero lo instalamos por seguridad
+          pip install bandit
+          echo "### 🛡️ Recomendaciones de Seguridad (Bandit)" >> $GITHUB_STEP_SUMMARY
+          echo "Mitigación y buenas prácticas para código Python:" >> $GITHUB_STEP_SUMMARY
+          bandit -r . \
+            -x ./.github,./venv,./.venv,./__pycache__,./reports,./output,./scans_output \
+            -ll -f txt >> $GITHUB_STEP_SUMMARY || true
+
+      - name: 4. Auditoría de Dependencias (Pip-audit)
+        continue-on-error: true
+        run: |
+          # pip-audit ya está en requirements.txt
+          pip install pip-audit
+          echo "### 📦 Alertas sobre Dependencias y Vulnerabilidades CVE" >> $GITHUB_STEP_SUMMARY
+          if [ -f requirements.txt ]; then
+            pip-audit -r requirements.txt -f markdown >> $GITHUB_STEP_SUMMARY || true
+          else
+            echo "No se encontró archivo requirements.txt para auditar." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 5. Análisis de Calidad y Estilo (Ruff)
+        continue-on-error: true
+        run: |
+          # Ruff ya está en requirements.txt
+          pip install ruff
+          echo "### 🎨 Sugerencias de Estilo y Sintaxis (Ruff)" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          ruff check . --output-format text >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
